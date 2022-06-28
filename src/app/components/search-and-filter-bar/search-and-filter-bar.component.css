@@ -1,0 +1,21 @@
+:host {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 50px 0 20px 0;
+  padding: 0.5rem;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+}
+
+.search-input {
+  color: grey;
+}

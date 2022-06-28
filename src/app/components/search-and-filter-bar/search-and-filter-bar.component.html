@@ -1,1 +1,11 @@
-<p>search-and-filter-bar works!</p>
+<div class="search-bar">
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input type="text" matInput (keyup)="onKeyUp($event)" />
+  </mat-form-field>
+  <mat-slider></mat-slider>
+  <mat-radio-group>
+    <mat-radio-button value="false">Available</mat-radio-button>
+    <mat-radio-button value="true">Unavailable</mat-radio-button>
+  </mat-radio-group>
+</div>
