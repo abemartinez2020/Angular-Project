@@ -19,3 +19,16 @@
 .search-input {
   color: grey;
 }
+
+.right-slider {
+  margin-left: -8px;
+}
+.left-slider {
+  margin-right: -8px;
+}
+
+@media (max-width: 770px) {
+  .search-bar {
+    flex-direction: column;
+  }
+}

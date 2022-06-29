@@ -3,9 +3,29 @@
     <mat-label>Search</mat-label>
     <input type="text" matInput (keyup)="onKeyUp($event)" />
   </mat-form-field>
-  <mat-slider></mat-slider>
-  <mat-radio-group>
-    <mat-radio-button value="false">Available</mat-radio-button>
-    <mat-radio-button value="true">Unavailable</mat-radio-button>
-  </mat-radio-group>
+  <div class="sliders">
+    <mat-slider
+      thumbLabel
+      class="left-slider"
+      step="1"
+      min="0"
+      max="10"
+    ></mat-slider>
+    <mat-slider
+      class="right-slider"
+      min="10"
+      max="20"
+      invert
+      thumbLabel
+    ></mat-slider>
+  </div>
+
+  <mat-button-toggle-group #toggleGroup="matButtonToggleGroup" multiple>
+    <mat-button-toggle value="true" (click)="onClick(toggleGroup.value)"
+      >Available</mat-button-toggle
+    >
+    <mat-button-toggle value="false" (click)="onClick(toggleGroup.value)"
+      >Unavailable</mat-button-toggle
+    >
+  </mat-button-toggle-group>
 </div>

@@ -7,6 +7,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class SearchAndFilterBarComponent implements OnInit {
   @Output() onKeyed = new EventEmitter();
+  @Output() onClicked = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}
@@ -14,5 +15,8 @@ export class SearchAndFilterBarComponent implements OnInit {
   onKeyUp(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.onKeyed.emit(filterValue);
+  }
+  onClick(value: string[]): void {
+    this.onClicked.emit(value);
   }
 }

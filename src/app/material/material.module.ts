@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 const materialCompnents = [
   MatToolbarModule,
@@ -19,6 +20,7 @@ const materialCompnents = [
   MatInputModule,
   MatSliderModule,
   MatRadioModule,
+  MatButtonToggleModule,
 ];
 
 @NgModule({

@@ -31,5 +31,10 @@ export class DataTableComponent implements OnInit {
 
   searchFilter(value: string): void {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
+    console.dir(this.dataSource.filter);
+  }
+
+  availabilityFilter(value: string[]) {
+    console.log('hello');
   }
 }
