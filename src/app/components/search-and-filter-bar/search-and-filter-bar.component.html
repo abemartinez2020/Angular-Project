@@ -1,26 +1,44 @@
-<div class="search-bar">
+<form [formGroup]="searchFilterForm" class="search-bar">
   <mat-form-field>
     <mat-label>Search</mat-label>
-    <input type="text" matInput (keyup)="onKeyUp($event)" />
+    <input
+      type="text"
+      matInput
+      (keyup)="onKeyUp($event)"
+      formControlName="searchText"
+    />
   </mat-form-field>
-  <div class="sliders">
+  <div class="slider-container">
+    <mat-label
+      >min: {{ searchFilterForm.value.minPrice | currency }}
+    </mat-label>
     <mat-slider
-      thumbLabel
       class="left-slider"
       step="1"
       min="0"
       max="10"
+      thumbLabel
+      formControlName="minPrice"
     ></mat-slider>
+  </div>
+  <div class="slider-container">
+    <mat-label
+      >max: {{ searchFilterForm.value.maxPrice | currency }}
+    </mat-label>
     <mat-slider
       class="right-slider"
       min="10"
       max="20"
-      invert
       thumbLabel
+      formControlName="maxPrice"
     ></mat-slider>
   </div>
 
-  <mat-button-toggle-group #toggleGroup="matButtonToggleGroup" multiple>
+  <mat-button-toggle-group
+    #toggleGroup="matButtonToggleGroup"
+    multiple
+    formArrayName="available"
+  >
     <mat-button-toggle value="true" (click)="onClick(toggleGroup.value)"
       >Available</mat-button-toggle
     >
@@ -28,4 +46,4 @@
       >Unavailable</mat-button-toggle
     >
   </mat-button-toggle-group>
-</div>
+</form>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-search-and-filter-bar',
@@ -8,9 +9,17 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class SearchAndFilterBarComponent implements OnInit {
   @Output() onKeyed = new EventEmitter();
   @Output() onClicked = new EventEmitter();
-  constructor() {}
+  searchFilterForm!: FormGroup;
+  constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.searchFilterForm = this.formBuilder.group({
+      searchText: '',
+      minPrice: '0',
+      maxPrice: '400',
+      available: '',
+    });
+  }
 
   onKeyUp(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;

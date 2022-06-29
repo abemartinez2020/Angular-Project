@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const materialCompnents = [
   MatToolbarModule,
@@ -21,6 +23,8 @@ const materialCompnents = [
   MatSliderModule,
   MatRadioModule,
   MatButtonToggleModule,
+  MatCheckboxModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({
