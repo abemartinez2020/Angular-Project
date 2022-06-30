@@ -14,7 +14,7 @@ export class SearchAndFilterBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchFilterForm = this.formBuilder.group({
-      searchText: '',
+      productName: '',
       minPrice: '0',
       maxPrice: '400',
       available: '',
@@ -25,7 +25,8 @@ export class SearchAndFilterBarComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.onKeyed.emit(filterValue);
   }
-  onClick(value: string[]): void {
-    this.onClicked.emit(value);
+  onClick(value: string): void {
+    const isAvailable = value === 'true';
+    this.onClicked.emit(Boolean(isAvailable));
   }
 }

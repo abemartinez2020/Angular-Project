@@ -5,7 +5,7 @@
       type="text"
       matInput
       (keyup)="onKeyUp($event)"
-      formControlName="searchText"
+      formControlName="productName"
     />
   </mat-form-field>
   <div class="slider-container">
@@ -17,7 +17,6 @@
       step="1"
       min="0"
       max="10"
-      thumbLabel
       formControlName="minPrice"
     ></mat-slider>
   </div>
@@ -29,21 +28,19 @@
       class="right-slider"
       min="10"
       max="20"
-      thumbLabel
       formControlName="maxPrice"
     ></mat-slider>
   </div>
 
-  <mat-button-toggle-group
-    #toggleGroup="matButtonToggleGroup"
-    multiple
-    formArrayName="available"
-  >
+  <mat-button-toggle-group #toggleGroup="matButtonToggleGroup">
     <mat-button-toggle value="true" (click)="onClick(toggleGroup.value)"
       >Available</mat-button-toggle
     >
     <mat-button-toggle value="false" (click)="onClick(toggleGroup.value)"
       >Unavailable</mat-button-toggle
+    >
+    <mat-button-toggle value="all" (click)="onClick(toggleGroup.value)"
+      >All</mat-button-toggle
     >
   </mat-button-toggle-group>
 </form>
