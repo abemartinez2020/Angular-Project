@@ -15,8 +15,7 @@ import { Filters } from 'src/app/types/filters';
 })
 export class DataTableComponent implements OnInit {
   displayedColumns!: string[];
-  dataSource!: any; //need to make sure the type works.
-  // dataSourceOriginal!: any;
+  dataSource: MatTableDataSource<Product> = new MatTableDataSource();
   pricePoints: PricePoints = {
     min: 0,
     mid: 0,
@@ -38,7 +37,7 @@ export class DataTableComponent implements OnInit {
     } else {
       console.log(this.route.snapshot.paramMap.keys);
       this.productService.getProducts().subscribe((products) => {
-        this.dataSource = new MatTableDataSource(products);
+        this.dataSource.data = products;
         console.log(this.dataSource);
         this.getPricePointRanges(products);
         this.dataSource.paginator = this.paginator;
