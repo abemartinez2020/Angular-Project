@@ -3,10 +3,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Product } from 'src/app/types/product';
 import { PricePoints } from 'src/app/types/pricePoints';
+import { PriceRange } from 'src/app/types/priceRange';
 import { ProductService } from 'src/app/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Filters } from 'src/app/types/filters';
-import { max } from 'rxjs';
 
 @Component({
   selector: 'app-data-table',
@@ -39,6 +39,7 @@ export class DataTableComponent implements OnInit {
       console.log(this.route.snapshot.paramMap.keys);
       this.productService.getProducts().subscribe((products) => {
         this.dataSource = new MatTableDataSource(products);
+        console.log(this.dataSource);
         this.getPricePointRanges(products);
         this.dataSource.paginator = this.paginator;
         this.displayedColumns = ['productName', 'price', 'isAvailable'];
@@ -61,24 +62,37 @@ export class DataTableComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
-
-  public getByFilters(filterValue: any): void {
+  public getByText(filterValue: string): void {
     if (typeof filterValue === 'string' && filterValue.length > 0) {
       this.filters.productName = filterValue;
     }
     if (typeof filterValue === 'string' && filterValue.length === 0) {
       this.filters.productName = undefined;
     }
-    if (
-      typeof filterValue === 'boolean' ||
-      typeof filterValue === 'undefined'
-    ) {
-      this.filters.isAvailable = filterValue;
-    }
     console.log(this.filters);
     this.updateParams(this.filters);
     this.productService
       .getFilteredData(this.filters)
-      .subscribe((products) => (this.dataSource = products));
+      .subscribe((products) => (this.dataSource.data = products));
+  }
+
+  public getByPriceRange(filterValue: PriceRange): void {
+    this.filters.price_gte = filterValue.minPrice;
+    this.filters.price_lte = filterValue.maxPrice;
+
+    this.updateParams(this.filters);
+    this.productService
+      .getFilteredData(this.filters)
+      .subscribe((products) => (this.dataSource.data = products));
+  }
+
+  public getByAvailability(filterValue: boolean | undefined): void {
+    this.filters.isAvailable = filterValue;
+
+    console.log(this.filters);
+    this.updateParams(this.filters);
+    this.productService
+      .getFilteredData(this.filters)
+      .subscribe((products) => (this.dataSource.data = products));
   }
 }

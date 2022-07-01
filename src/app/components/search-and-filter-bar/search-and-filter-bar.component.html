@@ -19,6 +19,12 @@
       min="{{ pricePoints.min }}"
       max="{{ pricePoints.mid }}"
       formControlName="minPrice"
+      (change)="
+        onChangeSlider(
+          searchFilterForm.value.minPrice,
+          searchFilterForm.value.maxPrice
+        )
+      "
     ></mat-slider>
   </div>
   <div class="slider-container">
@@ -31,6 +37,12 @@
       min="{{ pricePoints.mid }}"
       max="{{ pricePoints.max }}"
       formControlName="maxPrice"
+      (change)="
+        onChangeSlider(
+          searchFilterForm.value.minPrice,
+          searchFilterForm.value.maxPrice
+        )
+      "
     ></mat-slider>
   </div>
 

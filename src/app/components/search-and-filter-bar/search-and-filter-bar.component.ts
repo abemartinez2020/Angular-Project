@@ -11,14 +11,15 @@ export class SearchAndFilterBarComponent implements OnInit {
   @Input() pricePoints!: PricePoints;
   @Output() onKeyed = new EventEmitter();
   @Output() onClicked = new EventEmitter();
+  @Output() onChangedSlider = new EventEmitter();
   searchFilterForm!: FormGroup;
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.searchFilterForm = this.formBuilder.group({
       productName: '',
-      minPrice: '0',
-      maxPrice: '0',
+      minPrice: 0,
+      maxPrice: 0,
       available: '',
     });
   }
@@ -48,5 +49,14 @@ export class SearchAndFilterBarComponent implements OnInit {
         : undefined;
 
     this.onClicked.emit(isAvailable);
+  }
+
+  onChangeSlider(minPrice: number, maxPrice: number) {
+    if (!maxPrice) {
+      maxPrice = this.pricePoints.mid;
+    }
+    const priceRange = { minPrice, maxPrice };
+    console.log(priceRange);
+    this.onChangedSlider.emit(priceRange);
   }
 }

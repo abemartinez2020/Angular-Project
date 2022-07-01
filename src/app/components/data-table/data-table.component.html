@@ -1,6 +1,7 @@
 <app-search-and-filter-bar
-  (onKeyed)="getByFilters($event)"
-  (onClicked)="getByFilters($event)"
+  (onKeyed)="getByText($event)"
+  (onClicked)="getByAvailability($event)"
+  (onChangedSlider)="getByPriceRange($event)"
   [pricePoints]="pricePoints"
 ></app-search-and-filter-bar>
 
