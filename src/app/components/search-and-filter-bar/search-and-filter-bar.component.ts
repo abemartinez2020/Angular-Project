@@ -21,12 +21,30 @@ export class SearchAndFilterBarComponent implements OnInit {
     });
   }
 
+  private _activeValue = '';
+
+  onChange(group: any) {
+    if (this._activeValue === group.value) {
+      // make unchecked
+      group.value = '';
+      // this._activeValue = '';
+    } else {
+      this._activeValue = group.value;
+    }
+  }
+
   onKeyUp(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.onKeyed.emit(filterValue);
   }
-  onClick(value: string): void {
-    const isAvailable = value === 'true';
-    this.onClicked.emit(Boolean(isAvailable));
+  onClick(group: any): void {
+    this.onChange(group);
+    console.log(this._activeValue);
+    const isAvailable = this._activeValue === 'true';
+    // ? ''
+    // : this._activeValue === 'true'
+    // ? true
+    // : false;
+    this.onClicked.emit(isAvailable);
   }
 }

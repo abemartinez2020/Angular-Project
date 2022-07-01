@@ -33,14 +33,11 @@
   </div>
 
   <mat-button-toggle-group #toggleGroup="matButtonToggleGroup">
-    <mat-button-toggle value="true" (click)="onClick(toggleGroup.value)"
+    <mat-button-toggle value="true" (click)="onClick(toggleGroup)"
       >Available</mat-button-toggle
     >
-    <mat-button-toggle value="false" (click)="onClick(toggleGroup.value)"
+    <mat-button-toggle value="false" (click)="onClick(toggleGroup)"
       >Unavailable</mat-button-toggle
-    >
-    <mat-button-toggle value="all" (click)="onClick(toggleGroup.value)"
-      >All</mat-button-toggle
     >
   </mat-button-toggle-group>
 </form>

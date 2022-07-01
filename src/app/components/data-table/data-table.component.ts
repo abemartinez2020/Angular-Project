@@ -56,13 +56,17 @@ export class DataTableComponent implements OnInit {
   }
 
   getByFilters(filterValue: any): void {
-    if (typeof filterValue === 'string') {
+    if (typeof filterValue === 'string' && filterValue.length > 0) {
       console.log('hello name');
       this.filters.productName = filterValue;
     }
     if (typeof filterValue === 'boolean') {
-      console.log('hello boolean', filterValue);
-      this.filters.isAvailable = filterValue;
+      if (filterValue === this.filters.isAvailable) {
+        this.filters.isAvailable = undefined;
+      } else {
+        console.log('hello boolean', filterValue);
+        this.filters.isAvailable = filterValue;
+      }
     }
     this.updateParams(this.filters);
     this.productService
