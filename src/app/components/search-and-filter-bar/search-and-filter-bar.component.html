@@ -14,9 +14,10 @@
     </mat-label>
     <mat-slider
       class="left-slider"
+      thumbLabel
       step="1"
-      min="0"
-      max="10"
+      min="{{ pricePoints.min }}"
+      max="{{ pricePoints.mid }}"
       formControlName="minPrice"
     ></mat-slider>
   </div>
@@ -25,9 +26,10 @@
       >max: {{ searchFilterForm.value.maxPrice | currency }}
     </mat-label>
     <mat-slider
+      thumbLabel
       class="right-slider"
-      min="10"
-      max="20"
+      min="{{ pricePoints.mid }}"
+      max="{{ pricePoints.max }}"
       formControlName="maxPrice"
     ></mat-slider>
   </div>

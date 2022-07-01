@@ -1,6 +1,7 @@
 <app-search-and-filter-bar
   (onKeyed)="getByFilters($event)"
   (onClicked)="getByFilters($event)"
+  [pricePoints]="pricePoints"
 ></app-search-and-filter-bar>
 
 <div class="mat-elevation-z8 table-container">

@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PricePoints } from 'src/app/types/pricePoints';
 
 @Component({
   selector: 'app-search-and-filter-bar',
@@ -7,6 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./search-and-filter-bar.component.css'],
 })
 export class SearchAndFilterBarComponent implements OnInit {
+  @Input() pricePoints!: PricePoints;
   @Output() onKeyed = new EventEmitter();
   @Output() onClicked = new EventEmitter();
   searchFilterForm!: FormGroup;
@@ -16,11 +18,10 @@ export class SearchAndFilterBarComponent implements OnInit {
     this.searchFilterForm = this.formBuilder.group({
       productName: '',
       minPrice: '0',
-      maxPrice: '400',
+      maxPrice: '0',
       available: '',
     });
   }
-
   private _activeValue = '';
 
   onChange(group: any) {

@@ -2,16 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { Product } from 'src/app/types/product';
+import { PricePoints } from 'src/app/types/pricePoints';
 import { ProductService } from 'src/app/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Filters } from 'src/app/types/filters';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { max } from 'rxjs';
 
 @Component({
   selector: 'app-data-table',
@@ -22,6 +17,11 @@ export class DataTableComponent implements OnInit {
   displayedColumns!: string[];
   dataSource!: any; //need to make sure the type works.
   // dataSourceOriginal!: any;
+  pricePoints: PricePoints = {
+    min: 0,
+    mid: 0,
+    max: 0,
+  };
 
   filters: Filters = {};
 
@@ -39,10 +39,19 @@ export class DataTableComponent implements OnInit {
       console.log(this.route.snapshot.paramMap.keys);
       this.productService.getProducts().subscribe((products) => {
         this.dataSource = new MatTableDataSource(products);
+        this.getPricePointRanges(products);
         this.dataSource.paginator = this.paginator;
         this.displayedColumns = ['productName', 'price', 'isAvailable'];
       });
     }
+  }
+
+  private getPricePointRanges(data: Product[]) {
+    const prices = data.map((product) => product.price);
+    this.pricePoints.min = 0;
+    this.pricePoints.max = Math.max(...prices);
+    this.pricePoints.mid = Math.round(this.pricePoints.max / 2);
+    console.log(this.pricePoints);
   }
 
   private updateParams(filters: Filters) {
