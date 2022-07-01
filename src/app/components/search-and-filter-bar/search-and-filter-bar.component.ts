@@ -27,7 +27,7 @@ export class SearchAndFilterBarComponent implements OnInit {
     if (this._activeValue === group.value) {
       // make unchecked
       group.value = '';
-      // this._activeValue = '';
+      this._activeValue = '';
     } else {
       this._activeValue = group.value;
     }
@@ -39,12 +39,13 @@ export class SearchAndFilterBarComponent implements OnInit {
   }
   onClick(group: any): void {
     this.onChange(group);
-    console.log(this._activeValue);
-    const isAvailable = this._activeValue === 'true';
-    // ? ''
-    // : this._activeValue === 'true'
-    // ? true
-    // : false;
+    const isAvailable =
+      this._activeValue === 'true'
+        ? true
+        : this._activeValue === 'false'
+        ? false
+        : undefined;
+
     this.onClicked.emit(isAvailable);
   }
 }

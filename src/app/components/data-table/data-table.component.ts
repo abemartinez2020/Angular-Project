@@ -23,9 +23,7 @@ export class DataTableComponent implements OnInit {
   dataSource!: any; //need to make sure the type works.
   // dataSourceOriginal!: any;
 
-  filters: Filters = {
-    productName: '',
-  };
+  filters: Filters = {};
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor(
@@ -59,16 +57,16 @@ export class DataTableComponent implements OnInit {
     if (typeof filterValue === 'string' && filterValue.length > 0) {
       this.filters.productName = filterValue;
     }
-    if (filterValue.length === 0) {
+    if (typeof filterValue === 'string' && filterValue.length === 0) {
       this.filters.productName = undefined;
     }
-    if (typeof filterValue === 'boolean') {
-      if (filterValue === this.filters.isAvailable) {
-        this.filters.isAvailable = undefined;
-      } else {
-        this.filters.isAvailable = filterValue;
-      }
+    if (
+      typeof filterValue === 'boolean' ||
+      typeof filterValue === 'undefined'
+    ) {
+      this.filters.isAvailable = filterValue;
     }
+    console.log(this.filters);
     this.updateParams(this.filters);
     this.productService
       .getFilteredData(this.filters)

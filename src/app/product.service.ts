@@ -4,12 +4,12 @@ import { filter, Observable } from 'rxjs';
 import { Product } from './types/product';
 import { Filters } from './types/filters';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  }),
-  params: new HttpParams(),
-};
+// const httpOptions = {
+//   headers: new HttpHeaders({
+//     'Content-Type': 'application/json',
+//   }),
+//   params: new HttpParams(),
+// };
 
 @Injectable({
   providedIn: 'root',
@@ -24,12 +24,9 @@ export class ProductService {
   }
   getFilteredData(filters: Filters): Observable<Product[]> {
     let queryString = '?';
-    console.log('hey')
 
     if (filters.productName) {
       queryString += `productName_like=${filters.productName}`;
-    } else {
-      queryString;
     }
 
     if (filters.price_gte && filters.price_lte) {
