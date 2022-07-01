@@ -24,9 +24,12 @@ export class ProductService {
   }
   getFilteredData(filters: Filters): Observable<Product[]> {
     let queryString = '?';
+    console.log('hey')
 
     if (filters.productName) {
-      queryString += `productName_like=^${filters.productName}`;
+      queryString += `productName_like=${filters.productName}`;
+    } else {
+      queryString;
     }
 
     if (filters.price_gte && filters.price_lte) {

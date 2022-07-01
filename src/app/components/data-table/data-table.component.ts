@@ -47,7 +47,7 @@ export class DataTableComponent implements OnInit {
     }
   }
 
-  updateParams(filters: Filters) {
+  private updateParams(filters: Filters) {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: filters,
@@ -55,16 +55,17 @@ export class DataTableComponent implements OnInit {
     });
   }
 
-  getByFilters(filterValue: any): void {
+  public getByFilters(filterValue: any): void {
     if (typeof filterValue === 'string' && filterValue.length > 0) {
-      console.log('hello name');
       this.filters.productName = filterValue;
+    }
+    if (filterValue.length === 0) {
+      this.filters.productName = undefined;
     }
     if (typeof filterValue === 'boolean') {
       if (filterValue === this.filters.isAvailable) {
         this.filters.isAvailable = undefined;
       } else {
-        console.log('hello boolean', filterValue);
         this.filters.isAvailable = filterValue;
       }
     }
