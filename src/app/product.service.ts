@@ -19,22 +19,14 @@ export class ProductService {
     'https://my-json-server.typicode.com/fernandoAlonsoV/AngularProjectMockedData/products';
   constructor(private http: HttpClient) {}
 
-  // getProducts(filters: Filters): Observable<any> {
-  //   let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
-  //   return this.http.get<any>(this.API_URL + queryString, {
-  //     headers: new HttpHeaders().set('Content-Type', 'application/json'),
-  //     observe: 'response',
-  //   });
-  // }
   getFilteredData(filters: Filters): Observable<any> {
-    // let queryString = '?';
     let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
 
     if (filters.productName) {
       queryString += `&productName_like=${filters.productName}`;
     }
 
-    if (filters.price_gte && filters.price_lte) {
+    if (filters.price_lte) {
       queryString += `&price_gte=${filters.price_gte}&price_lte=${filters.price_lte}`;
     }
 

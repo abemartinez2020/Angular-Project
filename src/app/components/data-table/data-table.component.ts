@@ -44,6 +44,7 @@ export class DataTableComponent implements OnInit {
         if (params['price_gte'] && params['price_lte']) {
           this.filters.price_gte = Number(params['price_gte']);
           this.filters.price_lte = Number(params['price_lte']);
+          console.log('here');
         }
         if (params['productName']) {
           this.filters.productName = params['productName'];
@@ -52,13 +53,13 @@ export class DataTableComponent implements OnInit {
           this.filters.isAvailable = params['isAvailable'] === 'true';
           console.log(this.filters.isAvailable);
         }
-        this.updateDashboard(this.filters);
+        this.updateDashboard();
       }
     });
-    this.updateDashboard(this.filters);
+    this.updateDashboard();
   }
 
-  private updateDashboard(filters: Filters) {
+  private updateDashboard() {
     this.productService.getFilteredData(this.filters).subscribe((response) => {
       this.configureData(response);
       console.log('called', this.filters);
@@ -68,17 +69,7 @@ export class DataTableComponent implements OnInit {
   private configureData(response: any) {
     this.length = response.headers.get('x-total-count');
     this.dataSource.data = response.body;
-
-    // this.getPricePointRanges(response.body);
   }
-
-  // private getPricePointRanges(data: Product[]) {
-  //   const prices = data.map((product) => product.price);
-  //   this.pricePoints.min = 0;
-  //   this.pricePoints.max = Math.max(...prices);
-  //   this.pricePoints.mid = Math.round(this.pricePoints.max / 2);
-  //   console.log(this.pricePoints);
-  // }
 
   private updateParams(filters: Filters) {
     this.router.navigate([], {
@@ -117,7 +108,6 @@ export class DataTableComponent implements OnInit {
   public getByAvailability(filterValue: boolean | undefined): void {
     this.filters.isAvailable = filterValue;
 
-    console.log(this.filters);
     this.updateParams(this.filters);
     this.productService
       .getFilteredData(this.filters)
