@@ -19,12 +19,12 @@ export class DataTableComponent implements OnInit {
   dataSource: MatTableDataSource<Product> = new MatTableDataSource();
   pricePoints: PricePoints = {
     min: 0,
-    mid: 0,
-    max: 0,
+    mid: 235,
+    max: 470,
   };
 
   filters: Filters = {
-    page: 1,
+    page: 0,
     size: 5,
   };
 
@@ -57,16 +57,16 @@ export class DataTableComponent implements OnInit {
     console.log(response);
     this.dataSource.data = response.body;
 
-    this.getPricePointRanges(response.body);
+    // this.getPricePointRanges(response.body);
   }
 
-  private getPricePointRanges(data: Product[]) {
-    const prices = data.map((product) => product.price);
-    this.pricePoints.min = 0;
-    this.pricePoints.max = Math.max(...prices);
-    this.pricePoints.mid = Math.round(this.pricePoints.max / 2);
-    console.log(this.pricePoints);
-  }
+  // private getPricePointRanges(data: Product[]) {
+  //   const prices = data.map((product) => product.price);
+  //   this.pricePoints.min = 0;
+  //   this.pricePoints.max = Math.max(...prices);
+  //   this.pricePoints.mid = Math.round(this.pricePoints.max / 2);
+  //   console.log(this.pricePoints);
+  // }
 
   private updateParams(filters: Filters) {
     this.router.navigate([], {
@@ -87,6 +87,7 @@ export class DataTableComponent implements OnInit {
     this.productService
       .getFilteredData(this.filters)
       .subscribe((response) => this.configureData(response));
+    this.filters.page = 0;
   }
 
   public getByPriceRange(filterValue: PriceRange): void {
@@ -97,6 +98,7 @@ export class DataTableComponent implements OnInit {
     this.productService
       .getFilteredData(this.filters)
       .subscribe((response) => this.configureData(response));
+    this.filters.page = 0;
   }
 
   public getByAvailability(filterValue: boolean | undefined): void {
@@ -107,6 +109,7 @@ export class DataTableComponent implements OnInit {
     this.productService
       .getFilteredData(this.filters)
       .subscribe((response) => this.configureData(response));
+    this.filters.page = 0;
   }
 
   public onPaginateChange(event: PageEvent) {
