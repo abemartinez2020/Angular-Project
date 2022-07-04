@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Product } from 'src/app/types/product';
 import { PricePoints } from 'src/app/types/pricePoints';
 import { PriceRange } from 'src/app/types/priceRange';
@@ -14,6 +14,7 @@ import { Filters } from 'src/app/types/filters';
   styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent implements OnInit {
+  length = 29;
   displayedColumns!: string[];
   dataSource: MatTableDataSource<Product> = new MatTableDataSource();
   pricePoints: PricePoints = {
@@ -22,9 +23,12 @@ export class DataTableComponent implements OnInit {
     max: 0,
   };
 
-  filters: Filters = {};
+  filters: Filters = {
+    page: 1,
+    size: 5,
+  };
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
@@ -36,14 +40,24 @@ export class DataTableComponent implements OnInit {
       console.log(this.route.snapshot.paramMap.keys);
     } else {
       console.log(this.route.snapshot.paramMap.keys);
-      this.productService.getProducts().subscribe((products) => {
-        this.dataSource.data = products;
-        console.log(this.dataSource);
-        this.getPricePointRanges(products);
-        this.dataSource.paginator = this.paginator;
-        this.displayedColumns = ['productName', 'price', 'isAvailable'];
-      });
+      this.updateParams(this.filters);
+      this.productService
+        .getFilteredData(this.filters)
+        .subscribe((response) => {
+          this.configureData(response);
+
+          // this.dataSource.paginator = this.paginator;
+          console.log(this.dataSource);
+          this.displayedColumns = ['productName', 'price', 'isAvailable'];
+        });
     }
+  }
+  private configureData(response: any) {
+    this.length = response.headers.get('x-total-count');
+    console.log(response);
+    this.dataSource.data = response.body;
+
+    this.getPricePointRanges(response.body);
   }
 
   private getPricePointRanges(data: Product[]) {
@@ -68,11 +82,11 @@ export class DataTableComponent implements OnInit {
     if (typeof filterValue === 'string' && filterValue.length === 0) {
       this.filters.productName = undefined;
     }
-    console.log(this.filters);
+
     this.updateParams(this.filters);
     this.productService
       .getFilteredData(this.filters)
-      .subscribe((products) => (this.dataSource.data = products));
+      .subscribe((response) => this.configureData(response));
   }
 
   public getByPriceRange(filterValue: PriceRange): void {
@@ -82,7 +96,7 @@ export class DataTableComponent implements OnInit {
     this.updateParams(this.filters);
     this.productService
       .getFilteredData(this.filters)
-      .subscribe((products) => (this.dataSource.data = products));
+      .subscribe((response) => this.configureData(response));
   }
 
   public getByAvailability(filterValue: boolean | undefined): void {
@@ -92,6 +106,16 @@ export class DataTableComponent implements OnInit {
     this.updateParams(this.filters);
     this.productService
       .getFilteredData(this.filters)
-      .subscribe((products) => (this.dataSource.data = products));
+      .subscribe((response) => this.configureData(response));
+  }
+
+  public onPaginateChange(event: PageEvent) {
+    console.log('page change');
+    this.filters.page = event.pageIndex + 1;
+    this.filters.size = event.pageSize;
+    this.updateParams(this.filters);
+    this.productService
+      .getFilteredData(this.filters)
+      .subscribe((response) => this.configureData(response));
   }
 }

@@ -7,8 +7,8 @@ import { Filters } from './types/filters';
 // const httpOptions = {
 //   headers: new HttpHeaders({
 //     'Content-Type': 'application/json',
+//     observe: 'reponse',
 //   }),
-//   params: new HttpParams(),
 // };
 
 @Injectable({
@@ -19,14 +19,19 @@ export class ProductService {
     'https://my-json-server.typicode.com/fernandoAlonsoV/AngularProjectMockedData/products';
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.API_URL);
-  }
-  getFilteredData(filters: Filters): Observable<Product[]> {
-    let queryString = '?';
+  // getProducts(filters: Filters): Observable<any> {
+  //   let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
+  //   return this.http.get<any>(this.API_URL + queryString, {
+  //     headers: new HttpHeaders().set('Content-Type', 'application/json'),
+  //     observe: 'response',
+  //   });
+  // }
+  getFilteredData(filters: Filters): Observable<any> {
+    // let queryString = '?';
+    let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
 
     if (filters.productName) {
-      queryString += `productName_like=${filters.productName}`;
+      queryString += `&productName_like=${filters.productName}`;
     }
 
     if (filters.price_gte && filters.price_lte) {
@@ -38,6 +43,9 @@ export class ProductService {
     }
     console.log(queryString);
 
-    return this.http.get<Product[]>(this.API_URL + queryString);
+    return this.http.get<any>(this.API_URL + queryString, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      observe: 'response',
+    });
   }
 }
