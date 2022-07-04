@@ -23,7 +23,7 @@ export class ProductService {
     let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
 
     if (filters.productName) {
-      queryString += `&productName_like=${filters.productName}`;
+      queryString += `&productName_like=^${filters.productName}`;
     }
 
     if (filters.price_lte) {
