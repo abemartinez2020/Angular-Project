@@ -12,6 +12,10 @@ export class SearchAndFilterBarComponent implements OnInit {
   @Output() onKeyed = new EventEmitter();
   @Output() onClicked = new EventEmitter();
   @Output() onChangedSlider = new EventEmitter();
+
+  //check true or false status on isAvailable toggle-buttons
+  private _activeValue = '';
+
   searchFilterForm!: FormGroup;
   constructor(private formBuilder: FormBuilder) {}
 
@@ -23,7 +27,6 @@ export class SearchAndFilterBarComponent implements OnInit {
       available: '',
     });
   }
-  private _activeValue = '';
 
   onChange(group: any) {
     if (this._activeValue === group.value) {

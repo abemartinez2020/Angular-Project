@@ -39,6 +39,7 @@
     [pageIndex]="filters.page"
     [pageSize]="filters.size"
     (page)="onPaginateChange($event)"
+    (change)="updatePages()"
     showFirstLastButtons
   ></mat-paginator>
 </div>

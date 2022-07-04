@@ -14,9 +14,10 @@ import { Filters } from 'src/app/types/filters';
   styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent implements OnInit {
-  length = 29;
-  displayedColumns!: string[];
+  length: number | undefined = undefined;
+  displayedColumns: string[] = ['productName', 'price', 'isAvailable'];
   dataSource: MatTableDataSource<Product> = new MatTableDataSource();
+
   pricePoints: PricePoints = {
     min: 0,
     mid: 235,
@@ -28,7 +29,6 @@ export class DataTableComponent implements OnInit {
     size: 5,
   };
 
-  // @ViewChild(MatPaginator) paginator!: MatPaginator;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
@@ -36,25 +36,37 @@ export class DataTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.route.snapshot.paramMap.keys.length > 0) {
-      console.log(this.route.snapshot.paramMap.keys);
-    } else {
-      console.log(this.route.snapshot.paramMap.keys);
-      this.updateParams(this.filters);
-      this.productService
-        .getFilteredData(this.filters)
-        .subscribe((response) => {
-          this.configureData(response);
-
-          // this.dataSource.paginator = this.paginator;
-          console.log(this.dataSource);
-          this.displayedColumns = ['productName', 'price', 'isAvailable'];
-        });
-    }
+    this.route.queryParams.subscribe((params) => {
+      if (params['page']) {
+        console.log('page');
+        this.filters.page = Number(params['page']);
+        this.filters.size = Number(params['size']);
+        if (params['price_gte'] && params['price_lte']) {
+          this.filters.price_gte = Number(params['price_gte']);
+          this.filters.price_lte = Number(params['price_lte']);
+        }
+        if (params['productName']) {
+          this.filters.productName = params['productName'];
+        }
+        if (params['isAvailable']) {
+          this.filters.isAvailable = params['isAvailable'] === 'true';
+          console.log(this.filters.isAvailable);
+        }
+        this.updateDashboard(this.filters);
+      }
+    });
+    this.updateDashboard(this.filters);
   }
+
+  private updateDashboard(filters: Filters) {
+    this.productService.getFilteredData(this.filters).subscribe((response) => {
+      this.configureData(response);
+      console.log('called', this.filters);
+    });
+  }
+
   private configureData(response: any) {
     this.length = response.headers.get('x-total-count');
-    console.log(response);
     this.dataSource.data = response.body;
 
     // this.getPricePointRanges(response.body);
@@ -75,6 +87,7 @@ export class DataTableComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
   public getByText(filterValue: string): void {
     if (typeof filterValue === 'string' && filterValue.length > 0) {
       this.filters.productName = filterValue;
@@ -117,6 +130,12 @@ export class DataTableComponent implements OnInit {
     this.filters.page = event.pageIndex + 1;
     this.filters.size = event.pageSize;
     this.updateParams(this.filters);
+    this.productService
+      .getFilteredData(this.filters)
+      .subscribe((response) => this.configureData(response));
+  }
+
+  updatePages() {
     this.productService
       .getFilteredData(this.filters)
       .subscribe((response) => this.configureData(response));
