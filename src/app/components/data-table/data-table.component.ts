@@ -42,9 +42,8 @@ export class DataTableComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(
       (params) => {
-        console.log('executing, again');
+        console.log('executing in queryParam');
 
-        console.log('param world');
         this.filters.page = params['page'] ? Number(params['page']) : 0;
         this.filters.size = params['size'] ? Number(params['size']) : 5;
 
