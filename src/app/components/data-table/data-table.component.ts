@@ -97,8 +97,12 @@ export class DataTableComponent implements OnInit {
     this.filters.page = 0;
   }
 
-  public getByAvailability(filterValue: string | undefined): void {
-    this.filters.isAvailable = filterValue;
+  public getByAvailability(filterValue: string): void {
+    if (filterValue === '') {
+      this.filters.isAvailable = undefined;
+    } else {
+      this.filters.isAvailable = filterValue;
+    }
 
     this.updateParams(this.filters);
     this.updateTable();
