@@ -37,7 +37,6 @@ export class DataTableComponent implements OnInit {
 
     if (typeof query.get('productName') === 'string') {
       this.filters.productName = query.get('productName') as string;
-      console.log(query.get('productName'), this.filters.productName);
     }
 
     query.get('price_gte')
