@@ -25,8 +25,8 @@ export class DataTableComponent implements OnInit {
   };
 
   filters: Filters = {
-    page: 0,
-    size: 5,
+    // page: 0,
+    // size: 5,
     // productName: 'car',
     // price_gte: 77,
     // price_lte: 250,
@@ -40,27 +40,34 @@ export class DataTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      if (Object.keys(params).length > 0) {
-        if (params['page']) {
-          this.filters.page = Number(params['page']);
-          this.filters.size = Number(params['size']);
-        }
-        if (params['price_gte'] && params['price_lte']) {
-          this.filters.price_gte = Number(params['price_gte']);
-          this.filters.price_lte = Number(params['price_lte']);
-        }
-        if (params['productName']) {
-          this.filters.productName = params['productName'];
-        }
-        if (params['isAvailable']) {
-          this.filters.isAvailable = params['isAvailable'];
-        }
+    this.route.queryParams.subscribe(
+      (params) => {
+        console.log('executing, again');
+
+        console.log('param world');
+        this.filters.page = params['page'] ? Number(params['page']) : 0;
+        this.filters.size = params['size'] ? Number(params['size']) : 5;
+
+        params['price_gte']
+          ? (this.filters.price_gte = Number(params['price_gte']))
+          : null;
+
+        params['price_lte']
+          ? (this.filters.price_lte = Number(params['price_lte']))
+          : null;
+
+        params['productName']
+          ? (this.filters.productName = params['productName'])
+          : null;
+
+        params['isAvailable']
+          ? (this.filters.isAvailable = params['isAvailable'])
+          : null;
+
         this.updateDashboard();
-      } else if (Object.keys(params).length === 0) {
-        this.updateDashboard();
-      }
-    });
+      },
+      (error) => console.log('something went wrong', error)
+    );
   }
 
   private updateDashboard() {
@@ -91,9 +98,9 @@ export class DataTableComponent implements OnInit {
     }
 
     this.updateParams(this.filters);
-    this.productService
-      .getFilteredData(this.filters)
-      .subscribe((response) => this.configureData(response));
+    // this.productService
+    //   .getFilteredData(this.filters)
+    //   .subscribe((response) => this.configureData(response));
     this.filters.page = 0;
   }
 
@@ -102,9 +109,9 @@ export class DataTableComponent implements OnInit {
     this.filters.price_lte = filterValue.maxPrice;
 
     this.updateParams(this.filters);
-    this.productService
-      .getFilteredData(this.filters)
-      .subscribe((response) => this.configureData(response));
+    // this.productService
+    //   .getFilteredData(this.filters)
+    //   .subscribe((response) => this.configureData(response));
     this.filters.page = 0;
   }
 
@@ -112,9 +119,9 @@ export class DataTableComponent implements OnInit {
     this.filters.isAvailable = filterValue;
 
     this.updateParams(this.filters);
-    this.productService
-      .getFilteredData(this.filters)
-      .subscribe((response) => this.configureData(response));
+    // this.productService
+    //   .getFilteredData(this.filters)
+    //   .subscribe((response) => this.configureData(response));
     this.filters.page = 0;
   }
 
@@ -122,8 +129,8 @@ export class DataTableComponent implements OnInit {
     this.filters.page = event.pageIndex + 1;
     this.filters.size = event.pageSize;
     this.updateParams(this.filters);
-    this.productService
-      .getFilteredData(this.filters)
-      .subscribe((response) => this.configureData(response));
+    // this.productService
+    //   .getFilteredData(this.filters)
+    //   .subscribe((response) => this.configureData(response));
   }
 }
