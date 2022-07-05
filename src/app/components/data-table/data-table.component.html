@@ -3,6 +3,7 @@
   (onClicked)="getByAvailability($event)"
   (onChangedSlider)="getByPriceRange($event)"
   [pricePoints]="pricePoints"
+  [params]="filters"
 ></app-search-and-filter-bar>
 
 <div class="mat-elevation-z8 table-container">
@@ -39,7 +40,6 @@
     [pageIndex]="filters.page"
     [pageSize]="filters.size"
     (page)="onPaginateChange($event)"
-    (change)="updatePages()"
     showFirstLastButtons
   ></mat-paginator>
 </div>

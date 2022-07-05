@@ -6,14 +6,15 @@
       matInput
       (keyup)="onKeyUp($event)"
       formControlName="productName"
+      value="hi"
     />
   </mat-form-field>
   <div class="slider-container">
     <mat-label
       >min:
       {{
-        searchFilterForm.value.minPrice
-          ? (searchFilterForm.value.minPrice | currency)
+        searchFilterForm.value.price_gte
+          ? (searchFilterForm.value.price_gte | currency)
           : "- -"
       }}
     </mat-label>
@@ -23,11 +24,11 @@
       step="1"
       min="{{ pricePoints.min }}"
       max="{{ pricePoints.mid }}"
-      formControlName="minPrice"
+      formControlName="price_gte"
       (change)="
         onChangeSlider(
-          searchFilterForm.value.minPrice,
-          searchFilterForm.value.maxPrice
+          searchFilterForm.value.price_gte,
+          searchFilterForm.value.price_lte
         )
       "
     ></mat-slider>
@@ -36,8 +37,8 @@
     <mat-label
       >max:
       {{
-        searchFilterForm.value.maxPrice
-          ? (searchFilterForm.value.maxPrice | currency)
+        searchFilterForm.value.price_lte
+          ? (searchFilterForm.value.price_lte | currency)
           : "- -"
       }}
     </mat-label>
@@ -46,17 +47,21 @@
       class="right-slider"
       min="{{ pricePoints.mid }}"
       max="{{ pricePoints.max }}"
-      formControlName="maxPrice"
+      formControlName="price_lte"
       (change)="
         onChangeSlider(
-          searchFilterForm.value.minPrice,
-          searchFilterForm.value.maxPrice
+          searchFilterForm.value.price_gte,
+          searchFilterForm.value.price_lte
         )
       "
     ></mat-slider>
   </div>
 
-  <mat-button-toggle-group #toggleGroup="matButtonToggleGroup">
+  <mat-button-toggle-group
+    #toggleGroup="matButtonToggleGroup"
+    formControlName="isAvailable"
+  >
+    <p>{{ searchFilterForm.value.isAvailable }}</p>
     <mat-button-toggle value="true" (click)="onClick(toggleGroup)"
       >Available</mat-button-toggle
     >

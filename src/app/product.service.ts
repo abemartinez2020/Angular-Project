@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+} from '@angular/common/http';
 import { filter, Observable } from 'rxjs';
 import { Product } from './types/product';
 import { Filters } from './types/filters';
@@ -19,7 +24,7 @@ export class ProductService {
     'https://my-json-server.typicode.com/fernandoAlonsoV/AngularProjectMockedData/products';
   constructor(private http: HttpClient) {}
 
-  getFilteredData(filters: Filters): Observable<any> {
+  getFilteredData(filters: Filters): Observable<HttpResponse<Product[]>> {
     let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
 
     if (filters.productName) {
@@ -30,7 +35,7 @@ export class ProductService {
       queryString += `&price_gte=${filters.price_gte}&price_lte=${filters.price_lte}`;
     }
 
-    if (typeof filters.isAvailable === 'boolean') {
+    if (filters.isAvailable === 'true' || filters.isAvailable == 'false') {
       queryString += `&isAvailable=${filters.isAvailable}`;
     }
     console.log(queryString);

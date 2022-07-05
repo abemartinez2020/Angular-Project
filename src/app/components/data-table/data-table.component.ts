@@ -27,6 +27,10 @@ export class DataTableComponent implements OnInit {
   filters: Filters = {
     page: 0,
     size: 5,
+    // productName: 'car',
+    // price_gte: 77,
+    // price_lte: 250,
+    // isAvailable: 'false',
   };
 
   constructor(
@@ -37,32 +41,31 @@ export class DataTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      if (params['page']) {
-        console.log('page');
-        this.filters.page = Number(params['page']);
-        this.filters.size = Number(params['size']);
+      if (Object.keys(params).length > 0) {
+        if (params['page']) {
+          this.filters.page = Number(params['page']);
+          this.filters.size = Number(params['size']);
+        }
         if (params['price_gte'] && params['price_lte']) {
           this.filters.price_gte = Number(params['price_gte']);
           this.filters.price_lte = Number(params['price_lte']);
-          console.log('here');
         }
         if (params['productName']) {
           this.filters.productName = params['productName'];
         }
         if (params['isAvailable']) {
-          this.filters.isAvailable = params['isAvailable'] === 'true';
-          console.log(this.filters.isAvailable);
+          this.filters.isAvailable = params['isAvailable'];
         }
+        this.updateDashboard();
+      } else if (Object.keys(params).length === 0) {
         this.updateDashboard();
       }
     });
-    this.updateDashboard();
   }
 
   private updateDashboard() {
     this.productService.getFilteredData(this.filters).subscribe((response) => {
       this.configureData(response);
-      console.log('called', this.filters);
     });
   }
 
@@ -105,7 +108,7 @@ export class DataTableComponent implements OnInit {
     this.filters.page = 0;
   }
 
-  public getByAvailability(filterValue: boolean | undefined): void {
+  public getByAvailability(filterValue: string | undefined): void {
     this.filters.isAvailable = filterValue;
 
     this.updateParams(this.filters);
@@ -116,16 +119,9 @@ export class DataTableComponent implements OnInit {
   }
 
   public onPaginateChange(event: PageEvent) {
-    console.log('page change');
     this.filters.page = event.pageIndex + 1;
     this.filters.size = event.pageSize;
     this.updateParams(this.filters);
-    this.productService
-      .getFilteredData(this.filters)
-      .subscribe((response) => this.configureData(response));
-  }
-
-  updatePages() {
     this.productService
       .getFilteredData(this.filters)
       .subscribe((response) => this.configureData(response));
