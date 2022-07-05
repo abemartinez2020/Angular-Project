@@ -17,7 +17,7 @@ export class DataTableComponent implements OnInit {
   length: number | undefined = undefined;
   displayedColumns: string[] = ['productName', 'price', 'isAvailable'];
   dataSource: MatTableDataSource<Product> = new MatTableDataSource();
-
+  page!: PageEvent;
   pricePoints: PricePoints = {
     min: 0,
     mid: 235,
@@ -106,8 +106,10 @@ export class DataTableComponent implements OnInit {
   }
 
   public onPaginateChange(event: PageEvent) {
-    this.filters.page = event.pageIndex + 1;
+    console.log(event.pageIndex);
+    this.filters.page = event.pageIndex;
     this.filters.size = event.pageSize;
+
     this.updateParams(this.filters);
     this.updateTable();
   }
