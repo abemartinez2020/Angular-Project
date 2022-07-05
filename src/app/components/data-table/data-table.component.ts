@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { Product } from 'src/app/types/product';
 import { PricePoints } from 'src/app/types/pricePoints';
 import { PriceRange } from 'src/app/types/priceRange';
@@ -24,52 +24,40 @@ export class DataTableComponent implements OnInit {
     max: 470,
   };
 
-  filters: Filters = {
-    // page: 0,
-    // size: 5,
-    // productName: 'car',
-    // price_gte: 77,
-    // price_lte: 250,
-    // isAvailable: 'false',
-  };
+  filters: Filters = {};
 
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    const query = new URLSearchParams(location.search);
+    this.filters.page = query.get('page') ? Number(query.get('page')) : 0;
+    this.filters.size = query.get('size') ? Number(query.get('size')) : 5;
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(
-      (params) => {
-        console.log('executing in queryParam');
+    if (typeof query.get('productName') === 'string') {
+      this.filters.productName = query.get('productName') as string;
+      console.log(query.get('productName'), this.filters.productName);
+    }
 
-        this.filters.page = params['page'] ? Number(params['page']) : 0;
-        this.filters.size = params['size'] ? Number(params['size']) : 5;
+    query.get('price_gte')
+      ? (this.filters.price_gte = Number(query.get('price_gte')))
+      : null;
 
-        params['price_gte']
-          ? (this.filters.price_gte = Number(params['price_gte']))
-          : null;
+    query.get('price_lte')
+      ? (this.filters.price_lte = Number(query.get('price_lte')))
+      : null;
 
-        params['price_lte']
-          ? (this.filters.price_lte = Number(params['price_lte']))
-          : null;
-
-        params['productName']
-          ? (this.filters.productName = params['productName'])
-          : null;
-
-        params['isAvailable']
-          ? (this.filters.isAvailable = params['isAvailable'])
-          : null;
-
-        this.updateDashboard();
-      },
-      (error) => console.log('something went wrong', error)
-    );
+    query.get('isAvailable')
+      ? (this.filters.isAvailable = query.get('isAvailable') as string)
+      : null;
   }
 
-  private updateDashboard() {
+  ngOnInit(): void {
+    this.updateTable();
+  }
+
+  private updateTable() {
     this.productService.getFilteredData(this.filters).subscribe((response) => {
       this.configureData(response);
     });
@@ -97,9 +85,7 @@ export class DataTableComponent implements OnInit {
     }
 
     this.updateParams(this.filters);
-    // this.productService
-    //   .getFilteredData(this.filters)
-    //   .subscribe((response) => this.configureData(response));
+    this.updateTable();
     this.filters.page = 0;
   }
 
@@ -108,9 +94,7 @@ export class DataTableComponent implements OnInit {
     this.filters.price_lte = filterValue.maxPrice;
 
     this.updateParams(this.filters);
-    // this.productService
-    //   .getFilteredData(this.filters)
-    //   .subscribe((response) => this.configureData(response));
+    this.updateTable();
     this.filters.page = 0;
   }
 
@@ -118,9 +102,7 @@ export class DataTableComponent implements OnInit {
     this.filters.isAvailable = filterValue;
 
     this.updateParams(this.filters);
-    // this.productService
-    //   .getFilteredData(this.filters)
-    //   .subscribe((response) => this.configureData(response));
+    this.updateTable();
     this.filters.page = 0;
   }
 
@@ -128,8 +110,6 @@ export class DataTableComponent implements OnInit {
     this.filters.page = event.pageIndex + 1;
     this.filters.size = event.pageSize;
     this.updateParams(this.filters);
-    // this.productService
-    //   .getFilteredData(this.filters)
-    //   .subscribe((response) => this.configureData(response));
+    this.updateTable();
   }
 }

@@ -5,7 +5,7 @@ import {
   HttpParams,
   HttpResponse,
 } from '@angular/common/http';
-import { filter, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Product } from './types/product';
 import { Filters } from './types/filters';
 
