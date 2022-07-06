@@ -112,7 +112,6 @@ export class DataTableComponent implements OnInit {
   }
 
   public onPaginateChange(event: PageEvent) {
-    console.log(event.pageIndex);
     this.filters.page = event.pageIndex;
     this.filters.size = event.pageSize;
 
