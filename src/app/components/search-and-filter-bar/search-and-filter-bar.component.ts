@@ -29,7 +29,7 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   searchFilterForm = new FormGroup({
     productName: new FormControl(''),
     price_gte: new FormControl(0),
-    price_lte: new FormControl(0),
+    price_lte: new FormControl(500),
     isAvailable: new FormControl(''),
   });
   constructor() {}

@@ -17,7 +17,7 @@
       thumbLabel
       step="1"
       min="{{ pricePoints.min }}"
-      max="{{ pricePoints.mid }}"
+      max="{{ pricePoints.max }}"
       formControlName="price_gte"
     ></mat-slider>
   </div>
@@ -33,7 +33,7 @@
     <mat-slider
       thumbLabel
       class="right-slider"
-      min="{{ pricePoints.mid }}"
+      min="{{ pricePoints.min }}"
       max="{{ pricePoints.max }}"
       formControlName="price_lte"
     ></mat-slider>
@@ -43,7 +43,6 @@
     #toggleGroup="matButtonToggleGroup"
     formControlName="isAvailable"
   >
-    {{ searchFilterForm.value.isAvailable }}
     <mat-button-toggle value="true" (click)="onClick(toggleGroup)"
       >Available</mat-button-toggle
     >

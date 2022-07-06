@@ -14,6 +14,7 @@ import { Filters } from 'src/app/types/filters';
   styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent implements OnInit {
+  pageIndex = 0;
   pageEvent!: PageEvent;
   length: number | undefined = undefined;
   displayedColumns: string[] = ['productName', 'price', 'isAvailable'];
@@ -21,8 +22,7 @@ export class DataTableComponent implements OnInit {
   page!: PageEvent;
   pricePoints: PricePoints = {
     min: 0,
-    mid: 235,
-    max: 470,
+    max: 500,
   };
 
   filters: Filters = {};
@@ -33,7 +33,7 @@ export class DataTableComponent implements OnInit {
     private router: Router
   ) {
     const query = new URLSearchParams(location.search);
-    this.filters.page = query.get('page') ? Number(query.get('page')) : 0;
+    this.filters.page = query.get('page') ? Number(query.get('page')) : 1;
     this.filters.size = query.get('size') ? Number(query.get('size')) : 5;
 
     if (typeof query.get('productName') === 'string') {
@@ -94,13 +94,15 @@ export class DataTableComponent implements OnInit {
     filterValue.isAvailable === ''
       ? (this.filters.isAvailable = undefined)
       : (this.filters.isAvailable = filterValue.isAvailable);
-    this.filters.page = 0;
+    this.filters.page = 1;
+    this.pageIndex = 0;
     this.updateParams(this.filters);
     this.updateTable();
   }
 
   public onPaginateChange(event: PageEvent) {
-    this.filters.page = event.pageIndex;
+    this.pageIndex = event.pageIndex;
+    this.filters.page = event.pageIndex + 1;
     this.filters.size = event.pageSize;
 
     this.updateParams(this.filters);
