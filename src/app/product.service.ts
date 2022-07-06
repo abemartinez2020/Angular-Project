@@ -5,16 +5,10 @@ import {
   HttpParams,
   HttpResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Product } from './types/product';
 import { Filters } from './types/filters';
-
-// const httpOptions = {
-//   headers: new HttpHeaders({
-//     'Content-Type': 'application/json',
-//     observe: 'reponse',
-//   }),
-// };
+import { ProductData } from './types/productData';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +18,7 @@ export class ProductService {
     'https://my-json-server.typicode.com/fernandoAlonsoV/AngularProjectMockedData/products';
   constructor(private http: HttpClient) {}
 
-  getFilteredData(filters: Filters): Observable<HttpResponse<Product[]>> {
+  getFilteredData(filters: Filters): Observable<ProductData> {
     let queryString = `?_page=${filters.page}&_limit=${filters.size}`;
 
     if (filters.productName) {
@@ -38,11 +32,17 @@ export class ProductService {
     if (filters.isAvailable === 'true' || filters.isAvailable == 'false') {
       queryString += `&isAvailable=${filters.isAvailable}`;
     }
-    console.log(queryString);
 
-    return this.http.get<any>(this.API_URL + queryString, {
-      headers: new HttpHeaders().set('Content-Type', 'application/json'),
-      observe: 'response',
-    });
+    return this.http
+      .get<Product[]>(this.API_URL + queryString, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        observe: 'response',
+      })
+      .pipe(
+        map((response) => ({
+          products: response.body,
+          productCount: Number(response.headers.get('x-total-count')),
+        }))
+      );
   }
 }

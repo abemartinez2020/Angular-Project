@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { Product } from 'src/app/types/product';
+import { ProductData } from 'src/app/types/productData';
 import { PricePoints } from 'src/app/types/pricePoints';
 import { PriceRange } from 'src/app/types/priceRange';
 import { ProductService } from 'src/app/product.service';
@@ -14,6 +15,7 @@ import { Filters } from 'src/app/types/filters';
   styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent implements OnInit {
+  pageEvent!: PageEvent;
   length: number | undefined = undefined;
   displayedColumns: string[] = ['productName', 'price', 'isAvailable'];
   dataSource: MatTableDataSource<Product> = new MatTableDataSource();
@@ -62,9 +64,9 @@ export class DataTableComponent implements OnInit {
     });
   }
 
-  private configureData(response: any) {
-    this.length = response.headers.get('x-total-count');
-    this.dataSource.data = response.body;
+  private configureData(data: ProductData) {
+    this.length = data.productCount;
+    this.dataSource.data = data.products as Product[];
   }
 
   private updateParams(filters: Filters) {
