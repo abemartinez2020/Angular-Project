@@ -1,13 +1,7 @@
 <form [formGroup]="searchFilterForm" class="search-bar">
   <mat-form-field>
     <mat-label>Search</mat-label>
-    <input
-      type="text"
-      matInput
-      (keyup)="onKeyUp($event)"
-      formControlName="productName"
-      value="hi"
-    />
+    <input type="text" matInput formControlName="productName" value="hi" />
   </mat-form-field>
   <div class="slider-container">
     <mat-label
@@ -25,12 +19,6 @@
       min="{{ pricePoints.min }}"
       max="{{ pricePoints.mid }}"
       formControlName="price_gte"
-      (change)="
-        onChangeSlider(
-          searchFilterForm.value.price_gte,
-          searchFilterForm.value.price_lte
-        )
-      "
     ></mat-slider>
   </div>
   <div class="slider-container">
@@ -48,12 +36,6 @@
       min="{{ pricePoints.mid }}"
       max="{{ pricePoints.max }}"
       formControlName="price_lte"
-      (change)="
-        onChangeSlider(
-          searchFilterForm.value.price_gte,
-          searchFilterForm.value.price_lte
-        )
-      "
     ></mat-slider>
   </div>
 
@@ -61,6 +43,7 @@
     #toggleGroup="matButtonToggleGroup"
     formControlName="isAvailable"
   >
+    {{ searchFilterForm.value.isAvailable }}
     <mat-button-toggle value="true" (click)="onClick(toggleGroup)"
       >Available</mat-button-toggle
     >

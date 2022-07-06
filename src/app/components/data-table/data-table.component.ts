@@ -4,7 +4,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { Product } from 'src/app/types/product';
 import { ProductData } from 'src/app/types/productData';
 import { PricePoints } from 'src/app/types/pricePoints';
-import { PriceRange } from 'src/app/types/priceRange';
 import { ProductService } from 'src/app/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Filters } from 'src/app/types/filters';
@@ -77,38 +76,27 @@ export class DataTableComponent implements OnInit {
     });
   }
 
-  public getByText(filterValue: string): void {
-    if (typeof filterValue === 'string' && filterValue.length > 0) {
-      this.filters.productName = filterValue;
-    }
-    if (typeof filterValue === 'string' && filterValue.length === 0) {
+  filterChanges(filterValue: {
+    productName: string;
+    price_gte: number;
+    price_lte: number;
+    isAvailable: string;
+  }) {
+    console.log(filterValue);
+
+    if (filterValue.productName.length === 0) {
       this.filters.productName = undefined;
-    }
-
-    this.updateParams(this.filters);
-    this.updateTable();
-    this.filters.page = 0;
-  }
-
-  public getByPriceRange(filterValue: PriceRange): void {
-    this.filters.price_gte = filterValue.minPrice;
-    this.filters.price_lte = filterValue.maxPrice;
-
-    this.updateParams(this.filters);
-    this.updateTable();
-    this.filters.page = 0;
-  }
-
-  public getByAvailability(filterValue: string): void {
-    if (filterValue === '') {
-      this.filters.isAvailable = undefined;
     } else {
-      this.filters.isAvailable = filterValue;
+      this.filters.productName = filterValue.productName;
     }
-
+    this.filters.price_gte = filterValue.price_gte;
+    this.filters.price_lte = filterValue.price_lte;
+    filterValue.isAvailable === ''
+      ? (this.filters.isAvailable = undefined)
+      : (this.filters.isAvailable = filterValue.isAvailable);
+    this.filters.page = 0;
     this.updateParams(this.filters);
     this.updateTable();
-    this.filters.page = 0;
   }
 
   public onPaginateChange(event: PageEvent) {

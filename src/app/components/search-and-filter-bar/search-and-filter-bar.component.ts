@@ -8,8 +8,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 import { Filters } from 'src/app/types/filters';
 import { PricePoints } from 'src/app/types/pricePoints';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-search-and-filter-bar',
@@ -18,12 +20,10 @@ import { PricePoints } from 'src/app/types/pricePoints';
 })
 export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   @Input() pricePoints!: PricePoints;
-  @Output() onKeyed = new EventEmitter();
   @Output() onClicked = new EventEmitter();
-  @Output() onChangedSlider = new EventEmitter();
+  @Output() onFiltersChange = new EventEmitter();
   @Input() params: Filters = {};
 
-  //check true or false status on isAvailable toggle-buttons
   private _activeValue = '';
 
   searchFilterForm = new FormGroup({
@@ -34,10 +34,13 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   });
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.searchFilterForm.valueChanges
+      .pipe(debounceTime(200))
+      .subscribe((formData) => this.onFiltersChange.emit(formData));
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes['params']);
     for (let param in changes['params'].currentValue) {
       if (param !== 'page' && param !== 'size') {
         if (
@@ -62,31 +65,9 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
     }
   }
 
-  onKeyUp(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    this.onKeyed.emit(filterValue);
-  }
-  onClick(group: any): void {
+  onClick(group: MatButtonToggleGroup): void {
     this.onChange(group);
-    // const isAvailable =
-    //   this._activeValue === 'true'
-    //     ? true
-    //     : this._activeValue === 'false'
-    //     ? false
-    //     : undefined;
-
+    this.searchFilterForm.controls['isAvailable'].setValue(this._activeValue);
     this.onClicked.emit(this._activeValue);
-  }
-
-  onChangeSlider(
-    minPrice: number | null | undefined,
-    maxPrice: number | null | undefined
-  ) {
-    if (!maxPrice) {
-      maxPrice = this.pricePoints.mid;
-    }
-    const priceRange = { minPrice, maxPrice };
-    this.onChangedSlider.emit(priceRange);
   }
 }
