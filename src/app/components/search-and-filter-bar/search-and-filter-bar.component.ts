@@ -37,7 +37,6 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes['params']);
     for (let param in changes['params'].currentValue) {
       if (param !== 'page' && param !== 'size') {
         if (
@@ -69,12 +68,6 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   }
   onClick(group: any): void {
     this.onChange(group);
-    // const isAvailable =
-    //   this._activeValue === 'true'
-    //     ? true
-    //     : this._activeValue === 'false'
-    //     ? false
-    //     : undefined;
 
     this.onClicked.emit(this._activeValue);
   }

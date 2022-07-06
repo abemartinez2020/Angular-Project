@@ -34,7 +34,7 @@ export class DataTableComponent implements OnInit {
     private router: Router
   ) {
     const query = new URLSearchParams(location.search);
-    this.filters.page = query.get('page') ? Number(query.get('page')) : 0;
+    this.filters.page = query.get('page') ? Number(query.get('page')) : 1;
     this.filters.size = query.get('size') ? Number(query.get('size')) : 5;
 
     if (typeof query.get('productName') === 'string') {
@@ -59,14 +59,12 @@ export class DataTableComponent implements OnInit {
   }
 
   private updateTable() {
-    this.productService.getFilteredData(this.filters).subscribe((response) => {
-      this.configureData(response);
-    });
-  }
-
-  private configureData(data: ProductData) {
-    this.length = data.productCount;
-    this.dataSource.data = data.products as Product[];
+    this.productService
+      .getFilteredData(this.filters)
+      .subscribe((data: ProductData) => {
+        this.length = data.productCount;
+        this.dataSource.data = data.products as Product[];
+      });
   }
 
   private updateParams(filters: Filters) {
@@ -112,7 +110,8 @@ export class DataTableComponent implements OnInit {
   }
 
   public onPaginateChange(event: PageEvent) {
-    this.filters.page = event.pageIndex;
+    console.log(event.pageIndex);
+    this.filters.page = event.pageIndex + 1;
     this.filters.size = event.pageSize;
 
     this.updateParams(this.filters);
