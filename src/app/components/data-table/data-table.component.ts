@@ -58,14 +58,12 @@ export class DataTableComponent implements OnInit {
   }
 
   private updateTable() {
-    this.productService.getFilteredData(this.filters).subscribe((response) => {
-      this.configureData(response);
-    });
-  }
-
-  private configureData(data: ProductData) {
-    this.length = data.productCount;
-    this.dataSource.data = data.products as Product[];
+    this.productService
+      .getFilteredData(this.filters)
+      .subscribe((data: ProductData) => {
+        this.length = data.productCount;
+        this.dataSource.data = data.products as Product[];
+      });
   }
 
   private updateParams(filters: Filters) {
@@ -82,8 +80,6 @@ export class DataTableComponent implements OnInit {
     price_lte: number;
     isAvailable: string;
   }) {
-    console.log(filterValue);
-
     if (filterValue.productName.length === 0) {
       this.filters.productName = undefined;
     } else {

@@ -20,7 +20,6 @@ import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 })
 export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   @Input() pricePoints!: PricePoints;
-  @Output() onClicked = new EventEmitter();
   @Output() onFiltersChange = new EventEmitter();
   @Input() params: Filters = {};
 
@@ -37,7 +36,7 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.searchFilterForm.valueChanges
       .pipe(debounceTime(200))
-      .subscribe((formData) => this.onFiltersChange.emit(formData));
+      .subscribe(this.onFiltersChange); //more according to rxjs ********
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -68,6 +67,5 @@ export class SearchAndFilterBarComponent implements OnInit, OnChanges {
   onClick(group: MatButtonToggleGroup): void {
     this.onChange(group);
     this.searchFilterForm.controls['isAvailable'].setValue(this._activeValue);
-    this.onClicked.emit(this._activeValue);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { Product } from './types/product';
 import { Filters } from './types/filters';
 import { ProductData } from './types/productData';
@@ -37,7 +37,10 @@ export class ProductService {
         map((response) => ({
           products: response.body,
           productCount: Number(response.headers.get('x-total-count')),
-        }))
+        })),
+        take(1) // it's a must.
       );
   }
 }
+
+//avoid the unsubscribe. Use the async pipe
